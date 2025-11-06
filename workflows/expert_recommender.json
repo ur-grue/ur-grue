@@ -1,0 +1,105 @@
+{
+  "meta": {
+    "instanceId": "",
+    "workflowId": ""
+  },
+  "name": "Topic Expert Generator",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "topic",
+              "value": "Nachhaltige Energie"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Set Topic",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [440, 300]
+    },
+    {
+      "parameters": {
+        "operation": "createChatCompletion",
+        "model": "gpt-4o-mini",
+        "messages": [
+          {
+            "text": "Du bist ein präziser Rechercheassistent. Erstelle eine Liste von exakt zehn anerkannten Expert:innen zu einem angegebenen Thema. Gib die Antwort ausschließlich als JSON-Objekt im Format {\"experts\": [ ... ]}. Jeder Eintrag muss die Schlüssel \"Name\", \"Funktion\", \"Firma/Hochschule\" und \"Begründung\" enthalten.",
+            "type": "system"
+          },
+          {
+            "text": "Thema: {{$json.topic}}",
+            "type": "user"
+          }
+        ],
+        "responseFormat": "json_object"
+      },
+      "name": "OpenAI Experts",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 2,
+      "position": [680, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "{{ CREDENTIAL_ID }}",
+          "name": "OpenAI Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "const content = items[0].json?.data?.[0]?.message?.content || items[0].json?.choices?.[0]?.message?.content;\nif (!content) {\n  throw new Error('Keine Antwort vom OpenAI-Knoten erhalten.');\n}\nconst parsed = JSON.parse(content);\nif (!Array.isArray(parsed.experts)) {\n  throw new Error('Antwort enthält kein experts-Array.');\n}\nreturn parsed.experts.map(expert => ({ json: expert }));"
+      },
+      "name": "Format Experts",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [940, 300]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Topic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Topic": {
+      "main": [
+        [
+          {
+            "node": "OpenAI Experts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Experts": {
+      "main": [
+        [
+          {
+            "node": "Format Experts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {}
+}
