@@ -1,12 +1,12 @@
 # @ur-grue
 
-Commissioning editor (science) at **ARTE**, Europe's public broadcaster. Trained software developer. I build AI tooling for people who make media for a living.
+Commissioning editor (science) at [`ARTE`](https://arte.tv), the European public broadcaster. Trained software developer. I build AI tooling for people who make media for a living.
 
 ## What I'm working on
 
-**[`autopunk-media-skills`](https://github.com/ur-grue/autopunk-media-skills)** — The largest open-source Claude skill collection built specifically for journalists and media producers. Editorial workflows, prompt chains, production automation. Currently available in English, other locales coming soon.
+**[`autopunk-media-skills`](https://github.com/ur-grue/autopunk-media-skills)** — An open-source Claude skill collection built specifically for journalists and media producers. Editorial workflows, prompt chains, production automation. Currently in English and German, with French, Spanish, and Portuguese in progress.
 
-**[Autopunk](https://autopunk.io)** — Free, open AI tooling for newsrooms and creators. The skills repo is the foundation. More coming.
+**[Autopunk](https://autopunk.io)** — AI tooling for newsrooms and creators. The skills repo is the foundation. More coming.
 
 ## Why this exists
 
